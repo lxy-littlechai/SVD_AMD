@@ -5,6 +5,30 @@
 #include <cstdlib>
 using namespace std;
 
+template<int NUM>
+void read(const std::string& filename, float* complex_numbers) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Failed to open the file." << std::endl;
+            return;
+        }
+
+        std::string line;
+        int index = 0;
+        while (std::getline(file, line)) {
+            std::istringstream iss(line);
+            float real, imag;
+
+            int num = 0;
+            while (iss >> real && num < NUM) {
+                complex_numbers[index ++] = real;
+                num ++;
+            }
+        }
+
+        file.close();
+}
+
 template<int COL, int ROW>
 void read(const std::string& filename, float* complex_numbers) {
         std::ifstream file(filename);

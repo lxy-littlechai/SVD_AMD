@@ -8,9 +8,9 @@ BASE_PLATFORM ?= ${PLATFORM_REPO_PATHS}/xilinx_vck190_base_202320_1/xilinx_vck19
 # Makefile input options
 TARGET := hw_emu
 
-XO_DIR=./$(TARGET).xo_dir
-XSA_DIR=./$(TARGET).xsa_dir
-PACKAGE_DIR = ./$(TARGET).xclbin_dir
+XO_DIR=./300$(TARGET).xo_dir
+XSA_DIR=./300$(TARGET).xsa_dir
+PACKAGE_DIR = ./300$(TARGET).xclbin_dir
 
 # File names and locations
 KERNEL_SRC = ./pl/TopFunc.cpp
@@ -48,12 +48,12 @@ endif
 
 # kernel build config
 VPP_XO_FLAGS += -c --platform $(BASE_PLATFORM)
-VPP_XO_FLAGS += --hls.jobs 8
-VPP_XO_FLAGS += -I$(CUR_DIR)/pl
+VPP_XO_FLAGS += --hls.jobs 8 --freqhz=300000000:TopFunc --hls.clock 300000000:TopFunc
+VPP_XO_FLAGS += -I$(CUR_DIR)/pl 
 
 	
 VPP_LINK_FLAGS := -l -t $(TARGET) --platform $(BASE_PLATFORM) $(KERNEL_XO) $(GRAPH_O) --save-temps -g --config $(CONFIG_FILE) -o $(XSA)
-VPP_LINK_FLAGS += --profile.exec all:all:all
+VPP_LINK_FLAGS += --profile.exec all:all:all --freqhz=300000000:TopFunc.ap_clk
 VPP_FLAGS := $(VPP_LINK_FLAGS)
 
 CXX := $(XILINX_VITIS)/gnu/aarch64/lin/aarch64-linux/bin/aarch64-linux-gnu-g++
@@ -120,7 +120,7 @@ sd_card: all
 kernels: guard-PLATFORM_REPO_PATHS $(KERNEL_XO) $(KERNEL_XO_1)
 $(KERNEL_XO): $(KERNEL_SRC)
 	mkdir -p $(XO_DIR)
-	$(VPP) $(VPP_XO_FLAGS) -k TopFunc --hls.clock 300000000:TopFunc $< -o $@ | tee $(XO_DIR)/TopFunc.log
+	$(VPP) $(VPP_XO_FLAGS) -k TopFunc $< -o $@ | tee $(XO_DIR)/TopFunc.log
 	
 
 

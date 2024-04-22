@@ -2,7 +2,8 @@ build
 aie_component
 app_component
 hls_component
-
+*hw*.*
+.ipcache
 # aie work
 Work
 function_*

@@ -10,5 +10,5 @@ typedef hls::stream<axis_pkt> axis_pkt_stream;
 
 const int COL = col_num;
 const int ROW = row_num;
-const int NUM = COL*(ROW + COL)*2/4;
+const int NUM = COL*(ROW + COL)/4;
 
